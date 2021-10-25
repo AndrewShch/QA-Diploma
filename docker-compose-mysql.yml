@@ -1,8 +1,8 @@
 version: '3.7'
 services:
-  node-app:
+  node:
     build: ./gate-simulator
-    image: node-app:1.0
+    image: node:8
     container_name: node
     ports:
       - '9999:9999'
