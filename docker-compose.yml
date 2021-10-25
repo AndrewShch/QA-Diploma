@@ -16,7 +16,8 @@ services:
     image: postgres:latest
     ports:
       - '5432:5432'
-    ./pgdata:/var/lib/postgresql
+    volumes:
+      - ./pgdata:/var/lib/postgresql
     environment:
       - POSTGRES_DB=app
       - POSTGRES_USER=app
