@@ -36,7 +36,7 @@ public class DataHelper {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
     public static String getInvalidMonth() {
-        return "00";
+        return LocalDate.now().plusMonths(10).format(DateTimeFormatter.ofPattern("MM"));
     }
     public static String getEmptyMonth() {
         return "";
@@ -76,7 +76,7 @@ public class DataHelper {
         Faker faker = new Faker(new Locale("en"));
         return faker.name().firstName() + " " + faker.name().lastName();
     }
-    public static String getOneEngLetter(){
+    public static String getOwnerWithOneEngLetter(){
         return "Q";
     }
     public static String getOwnerWithRusLetters() {

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+
 }
 
 group 'ru.netology'
@@ -11,24 +12,27 @@ sourceCompatibility = 11
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+
 repositories {
+
     mavenCentral()
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    testImplementation 'com.codeborne:selenide:5.18.0'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'com.codeborne:selenide:5.25.0-selenium-4.0.0'
     implementation 'com.github.javafaker:javafaker:1.0.2'
-    testImplementation 'io.rest-assured:rest-assured:4.3.0'
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
     testImplementation 'mysql:mysql-connector-java:8.0.25'
-    testImplementation 'org.postgresql:postgresql:42.2.24'
-    testImplementation 'com.google.code.gson:gson:2.8.6'
+    testImplementation 'org.postgresql:postgresql:42.2.24.jre7'
+    testImplementation 'com.google.code.gson:gson:2.8.8'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
+
 
 
 }
@@ -36,4 +40,7 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
+    systemProperty 'url', System.getProperty('url')
+    systemProperty 'db.login' , System.getProperty('db.login', 'app')
+    systemProperty 'db.password' , System.getProperty('db.password', 'pass')
 }
