@@ -4,7 +4,9 @@ package test;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import data.DataHelper;
 import data.SqlHelper;
+import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,16 @@ public class PaymentDebitCardTest {
     @BeforeEach
     void setUp(){
         open("http://185.119.57.64:8080/");
+    }
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SqlHelper.cleanTables();
     }
 
 
@@ -71,6 +83,20 @@ public class PaymentDebitCardTest {
      }
 
      @Test
+     void shouldDontSuccessCardNumberWithNulls(){
+         val dashboardPage = new DashboardPage();
+         val paymentFormDebit = new PaymentFormDebit();
+         dashboardPage.getDebitCardPayment();
+         val cardNumber = DataHelper.getCardNumberWithNulls();
+         val month = DataHelper.getMonth();
+         val year = DataHelper.getYear();
+         val cvccvv = DataHelper.getCorrectCVCCVV();
+         val owner = DataHelper.getValidOwner();
+         paymentFormDebit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+         paymentFormDebit.checkErrorNotification();
+     }
+
+     @Test
     void shouldDontSuccessWithEmptyFieldCardNumber(){
          val dashboardPage = new DashboardPage();
          val paymentFormDebit = new PaymentFormDebit();
@@ -114,6 +140,20 @@ public class PaymentDebitCardTest {
         paymentFormDebit.checkWrongFormatMessage();
     }
 
+    @Test
+    void shouldDontSuccessMonthWithNulls(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormDebit = new PaymentFormDebit();
+        dashboardPage.getDebitCardPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonthWithNulls();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormDebit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormDebit.checkWrongFormatMessage();
+    }
+
     //Year
 
     @Test
@@ -142,6 +182,35 @@ public class PaymentDebitCardTest {
         val owner = DataHelper.getValidOwner();
         paymentFormDebit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
         paymentFormDebit.checkWrongFormatMessage();
+    }
+
+    @Test
+    void shouldSuccessCardExpiryDate(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormDebit = new PaymentFormDebit();
+        dashboardPage.getDebitCardPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getCardExpiryDate();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormDebit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
+        paymentFormDebit.checkSuccessNotification();
+
+    }
+
+    @Test
+    void shouldDontSuccessAfterCardExpiryDate(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormDebit = new PaymentFormDebit();
+        dashboardPage.getDebitCardPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getAfterCardExpiryDate();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormDebit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
+        paymentFormDebit.checkWrongCardExpirationMessage();
     }
 
     //CVC/CVV
@@ -259,7 +328,5 @@ public class PaymentDebitCardTest {
         paymentFormDebit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
         paymentFormDebit.checkEmptyFieldMessage();
     }
-
-
-
 }
+

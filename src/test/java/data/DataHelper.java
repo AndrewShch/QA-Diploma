@@ -26,6 +26,9 @@ public class DataHelper {
     public static CardNumber getInvalidCardNumber() {
         return new CardNumber("4444 4444 4444 4440");
     }
+    public static CardNumber getCardNumberWithNulls(){
+        return new CardNumber("0000 0000 0000 0000");
+    }
     public static CardNumber getCardWithoutNumber() {
         return new CardNumber("");
     }
@@ -36,22 +39,31 @@ public class DataHelper {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
     }
     public static String getInvalidMonth() {
-        return LocalDate.now().plusMonths(10).format(DateTimeFormatter.ofPattern("MM"));
+        return "25";
     }
     public static String getEmptyMonth() {
         return "";
+    }
+    public static String getMonthWithNulls(){
+        return "00";
     }
 
     //Year
 
     public static String getYear() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yy"));
+        return LocalDate.now().plusYears(1).format(DateTimeFormatter.ofPattern("yy"));
     }
     public static String getLastYear(){
         return LocalDate.now().minusYears(1).format(DateTimeFormatter.ofPattern("yy"));
     }
     public static String getEmptyYear(){
         return "";
+    }
+    public static String getAfterCardExpiryDate(){
+        return LocalDate.now().plusYears(6).format(DateTimeFormatter.ofPattern("yy"));
+    }
+    public static String getCardExpiryDate(){
+        return LocalDate.now().plusYears(5).format(DateTimeFormatter.ofPattern("yy"));
     }
 
     //CVC/CVV

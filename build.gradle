@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.9.6'
 
 }
 
@@ -12,9 +13,18 @@ sourceCompatibility = 11
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+allure {
+    autoconfigure = true
+    version = '2.13.3'
+
+    useJUnit5 {
+        version = '2.13.3'
+    }
+}
+
 
 repositories {
-
+    jcenter()
     mavenCentral()
 }
 
@@ -32,6 +42,7 @@ dependencies {
     testImplementation 'org.postgresql:postgresql:42.2.24.jre7'
     testImplementation 'com.google.code.gson:gson:2.8.8'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
+    testImplementation 'io.qameta.allure:allure-selenide:2.15.0'
 
 
 

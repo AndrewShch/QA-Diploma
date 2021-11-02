@@ -18,7 +18,7 @@ public class SqlHelper {
     }
 
     @SneakyThrows
-    public static void deleteTables() {
+    public static void cleanTables() {
         val creditRequest = "DELETE FROM credit_request_entity";
         val order = "DELETE FROM order_entity";
         val payment = "DELETE FROM payment_entity";

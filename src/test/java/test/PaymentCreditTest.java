@@ -1,13 +1,21 @@
 package test;
 
+import com.codeborne.selenide.logevents.SelenideLogger;
 import data.DataHelper;
+import data.SqlHelper;
+import io.qameta.allure.selenide.AllureSelenide;
 import lombok.val;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import page.DashboardPage;
 import page.PaymentFormCredit;
+import page.PaymentFormDebit;
+
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaymentCreditTest {
 
@@ -16,16 +24,99 @@ public class PaymentCreditTest {
         open("http://185.119.57.64:8080/");
     }
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SqlHelper.cleanTables();
+    }
+
     //Card
 
 
+    @Test
+    void shouldPaymentCreditCardWithStatusApproved(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormCredit.checkSuccessNotification();
+        val paymentStatus = SqlHelper.getStatusCreditRequestEntity();
+        assertEquals("APPROVED", paymentStatus);
+    }
+
+    @Test
+    void shouldPaymentCreditWithStatusDeclined(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getDeclinedCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormCredit.checkErrorNotification();
+        val paymentStatus = SqlHelper.getStatusCreditRequestEntity();
+        assertEquals("DECLINES", paymentStatus);
+    }
+
+    @Test
+    void shouldDontSuccessByCreditWithAnotherCard(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getInvalidCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormCredit.checkErrorNotification();
+    }
+
+    @Test
+    void shouldDontSuccessByCreditCardNumberWithNulls(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getCardNumberWithNulls();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormCredit.checkErrorNotification();
+    }
+
+    @Test
+    void shouldDontSuccessByCreditWithEmptyFieldCardNumber(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getCardWithoutNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormCredit.checkWrongFormatMessage();
+    }
 
 
 
     // Month
 
     @Test
-    void shouldDontSuccessWithInvalidMonth(){
+    void shouldDontSuccessByCreditWithInvalidMonth(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -39,7 +130,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessWithEmptyFieldMonth(){
+    void shouldDontSuccessByCreditWithEmptyFieldMonth(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -52,10 +143,24 @@ public class PaymentCreditTest {
         paymentFormCredit.checkWrongFormatMessage();
     }
 
+    @Test
+    void shouldDontSuccessByCreditMonthWithNulls(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonthWithNulls();
+        val year = DataHelper.getYear();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year,cvccvv, owner);
+        paymentFormCredit.checkWrongFormatMessage();
+    }
+
     //Year
 
     @Test
-    void shouldDontSuccessWithLastYear(){
+    void shouldDontSuccessByCreditWithLastYear(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -69,7 +174,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessWithEmptyFieldYear() {
+    void shouldDontSuccessByCreditWithEmptyFieldYear() {
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -81,11 +186,40 @@ public class PaymentCreditTest {
         paymentFormCredit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
         paymentFormCredit.checkWrongFormatMessage();
     }
+    @Test
+    void shouldSuccessByCreditCardExpiryDate(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getCardExpiryDate();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
+        paymentFormCredit.checkSuccessNotification();
+
+    }
+
+    @Test
+    void shouldDontSuccessByCreditAfterCardExpiryDate(){
+        val dashboardPage = new DashboardPage();
+        val paymentFormCredit = new PaymentFormCredit();
+        dashboardPage.getCreditPayment();
+        val cardNumber = DataHelper.getApprovedCardNumber();
+        val month = DataHelper.getMonth();
+        val year = DataHelper.getAfterCardExpiryDate();
+        val cvccvv = DataHelper.getCorrectCVCCVV();
+        val owner = DataHelper.getValidOwner();
+        paymentFormCredit.fillingFieldsFormat(cardNumber, month, year, cvccvv, owner);
+        paymentFormCredit.checkWrongCardExpirationMessage();
+    }
+
 
     //CVC/CVV
 
     @Test
-    void shouldDontSuccessCvccvvWithTwoNumbers(){
+    void shouldDontSuccessByCreditCvccvvWithTwoNumbers(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -99,7 +233,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessCvccvvWithOneNumber(){
+    void shouldDontSuccessByCreditCvccvvWithOneNumber(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -113,7 +247,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessWithEmptyFieldCvccvv(){
+    void shouldDontSuccessByCreditWithEmptyFieldCvccvv(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -129,7 +263,7 @@ public class PaymentCreditTest {
     //Owner
 
     @Test
-    void shouldDontSuccessOwnerWithOneLetter(){
+    void shouldDontSuccessByCreditOwnerWithOneLetter(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -143,7 +277,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessOwnerWithRusLetters(){
+    void shouldDontSuccessByCreditOwnerWithRusLetters(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -157,7 +291,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessOwnerWithNumbers(){
+    void shouldDontSuccessByCreditOwnerWithNumbers(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -171,7 +305,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessOwnerWithSpecialSymbols(){
+    void shouldDontSuccessByCreditOwnerWithSpecialSymbols(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();
@@ -185,7 +319,7 @@ public class PaymentCreditTest {
     }
 
     @Test
-    void shouldDontSuccessWithEmptyFieldOwner(){
+    void shouldDontSuccessByCreditWithEmptyFieldOwner(){
         val dashboardPage = new DashboardPage();
         val paymentFormCredit = new PaymentFormCredit();
         dashboardPage.getCreditPayment();

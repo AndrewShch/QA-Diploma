@@ -14,7 +14,7 @@ public class PaymentFormCredit {
     private final SelenideElement cardNumberField = $("[placeholder='0000 0000 0000 0000']");
     private final SelenideElement monthField = $("[placeholder='08']");
     private final SelenideElement yearField = $("[placeholder='22']");
-    private final SelenideElement ownerField = $(byText("Владелец")).parent();
+    private final SelenideElement ownerField = $("fieldset > div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input");
     private final SelenideElement cvccvvField = $("[placeholder='999']");
     private final SelenideElement button = $$(".button").find(Condition.exactText("Продолжить"));
 
