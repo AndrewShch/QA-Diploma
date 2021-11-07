@@ -18,15 +18,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaymentDebitCardTest {
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
     @BeforeEach
     void setUp(){
         open("http://185.119.57.64:8080/");
     }
 
-    @BeforeAll
-    static void setUpAll() {
-        SelenideLogger.addListener("allure", new AllureSelenide());
-    }
+
 
     @AfterAll
     static void tearDownAll() {
