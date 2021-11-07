@@ -29,6 +29,7 @@
 14. Запускаем тесты с базой данных PostgreSQL 
     * `./gradlew clean test -Durl=jdbc:postgresql://185.119.57.64:5432/app`
 15. Генерируем отчет спомощью фреймворка Allure
+    * `./gradlew allureReport`
     * `./gradlew allureServe`
 16. Останавливаем контейнеры 
     * `docker-compose down`
