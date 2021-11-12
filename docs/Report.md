@@ -15,10 +15,14 @@
 * Успешных - 28
 * Неуспешных - 12 
 
-### Отчет Gradle:
+### Отчет Gradle
 
 ![](../../reports/tests reports/gradle.jpg)
 
+### Отчет Allure
+![](../../reports/tests reports/allure.jpg)
+![](../../reports/tests reports/allure2.jpg)
+![](../../reports/tests reports/allure3.jpg)
 
 ### Общие рекомендации
 
