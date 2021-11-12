@@ -4,7 +4,7 @@
 
 Было проведено автоматизированное тестирование веб-сервиса покупки тура, в соответсвии с [планом](Plan.md)
 * Проведены позитивные и негативные сценарии
-* Реализована поддержка и взаимодействие с базами данных - MySQL и PostgreSQL
+* Реализована поддержка и взаимодействие с базами данных  MySQL и PostgreSQL
 
 
 ### Тест-кейсы
@@ -17,12 +17,13 @@
 
 ### Отчет Gradle
 
-![](../../reports/tests reports/gradle.jpg)
+![gradle](https://user-images.githubusercontent.com/84085779/141511365-60b0cb99-e418-4c43-8cc1-474c3de67f93.jpg)
+
 
 ### Отчет Allure
-![](../../reports/tests reports/allure.jpg)
-![](../../reports/tests reports/allure2.jpg)
-![](../../reports/tests reports/allure3.jpg)
+![allure](https://user-images.githubusercontent.com/84085779/141511382-b54f3d44-7d0e-4f3e-8af8-7b49025d8bf5.jpg)
+![allure2](https://user-images.githubusercontent.com/84085779/141511390-e9a51c13-8b56-4aa3-ac05-5972b14cb054.jpg)
+![allure3](https://user-images.githubusercontent.com/84085779/141511407-61f97690-7edb-4f5e-87a4-66fd0608a045.jpg)
 
 ### Общие рекомендации
 
