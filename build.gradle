@@ -16,6 +16,9 @@ compileTestJava.options.encoding = "UTF-8"
 allure {
     autoconfigure = true
     version = '2.13.3'
+    clean = true
+    reportDir = file("$projectDir/build/allure-report")
+    resultsDir = file("$projectDir/build/allure-results")
 
     useJUnit5 {
         version = '2.13.3'
@@ -51,8 +54,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    systemProperty 'selenide.headless', System.getProperty('selenide.headless')
-    systemProperty 'url', System.getProperty('url')
+    systemProperty 'allure.results.directory', "$projectDir/build/allure-results"
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless', 'true')
+    systemProperty 'url', System.getProperty('url', 'jdbc:mysql://185.119.57.64:3306/app')
     systemProperty 'db.login' , System.getProperty('db.login', 'app')
     systemProperty 'db.password' , System.getProperty('db.password', 'pass')
 }

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import page.DashboardPage;
 import page.PaymentFormCredit;
-import page.PaymentFormDebit;
+
 
 
 import static com.codeborne.selenide.Selenide.open;
@@ -28,6 +28,7 @@ public class PaymentCreditTest {
     void setUp(){
         open("http://185.119.57.64:8080/");
     }
+
 
 
 
