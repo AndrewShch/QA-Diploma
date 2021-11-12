@@ -1,7 +1,7 @@
 ### Документация
-* [План автоматизации тестирования покупки тура "Марракэш"](Plan.md)
-* [Отчет по итогам автоматизированного тестирования](README.md)
-* [Отчет по итогам автоматизации](Summary.md)
+* [План автоматизации тестирования покупки тура "Марракэш"](https://github.com/AndrewShch/QA-Diploma/blob/master/docs/Plan.md)
+* [Отчет по итогам автоматизированного тестирования](https://github.com/AndrewShch/QA-Diploma/blob/master/docs/Report.md)
+* [Отчет по итогам автоматизации](https://github.com/AndrewShch/QA-Diploma/blob/master/docs/Summary.md)
 ### Запуск Авто-тесто
 
 #### Предусловие
